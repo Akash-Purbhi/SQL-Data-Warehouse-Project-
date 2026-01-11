@@ -5,7 +5,12 @@ Create Database and Schemas
 Script Purpose:
     This script creates a new database named 'DataWarehouse' after checking if it already exists. 
     If the database exists, it is dropped and recreated. Additionally, the script sets up three schemas 
-    within the database: 'bronze', 'silver', and 'gold'.
+    within the database: 'bronze', 'silver', and 'gold' for the medallion architecture pattern.
+    
+    Schema Purposes:
+    - bronze: Raw data layer - Stores unprocessed data exactly as received from source systems
+    - silver: Cleaned data layer - Stores validated, cleaned, and transformed data
+    - gold: Business data layer - Stores aggregated metrics, reports, and analytics-ready data
 	
 WARNING:
     Running this script will drop the entire 'DataWarehouse' database if it exists. 
@@ -15,7 +20,6 @@ WARNING:
 
 USE master;
 GO
-
 -- Drop and recreate the 'DataWarehouse' database
 IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'DataWarehouse')
 BEGIN
@@ -23,20 +27,17 @@ BEGIN
     DROP DATABASE DataWarehouse;
 END;
 GO
-
 -- Create the 'DataWarehouse' database
 CREATE DATABASE DataWarehouse;
 GO
-
 USE DataWarehouse;
 GO
-
--- Create Schemas
+-- Create bronze schema (raw data layer)
 CREATE SCHEMA bronze;
 GO
-
+-- Create silver schema (cleaned data layer)
 CREATE SCHEMA silver;
 GO
-
+-- Create gold schema (business data layer)
 CREATE SCHEMA gold;
 GO
