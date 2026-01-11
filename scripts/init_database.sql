@@ -1,26 +1,42 @@
 /*
-===============================================================================
-Script:       Create Database and Schemas
-Purpose:      This script creates a new database named 'DataWarehouse'.
-              - Creates three separate databases: 'bronze', 'silver', and 'gold'
-              - bronze: Stores raw, unprocessed data
-              - silver: Stores cleaned and validated data
-              - gold: Stores aggregated, business-ready data
-WARNING:      Running this script will DROP the 'DataWarehouse' database if it exists.
-              ⚠️ All data will be permanently deleted.
-              ⚠️ Ensure you have proper backups before executing this script.
-===============================================================================
+=============================================================
+Create Database and Schemas
+=============================================================
+Script Purpose:
+    This script creates a new database named 'DataWarehouse' after checking if it already exists. 
+    If the database exists, it is dropped and recreated. Additionally, the script sets up three schemas 
+    within the database: 'bronze', 'silver', and 'gold'.
+	
+WARNING:
+    Running this script will drop the entire 'DataWarehouse' database if it exists. 
+    All data in the database will be permanently deleted. Proceed with caution 
+    and ensure you have proper backups before running this script.
 */
 
+USE master;
+GO
 
-DROP DATABASE IF EXISTS datawarehouse;
+-- Drop and recreate the 'DataWarehouse' database
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'DataWarehouse')
+BEGIN
+    ALTER DATABASE DataWarehouse SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DataWarehouse;
+END;
+GO
 
-CREATE DATABASE datawarehouse;
+-- Create the 'DataWarehouse' database
+CREATE DATABASE DataWarehouse;
+GO
 
-USE datawarehouse;
+USE DataWarehouse;
+GO
 
--- Create the schemas
+-- Create Schemas
 CREATE SCHEMA bronze;
-CREATE SCHEMA silver;
-CREATE SCHEMA gold;
+GO
 
+CREATE SCHEMA silver;
+GO
+
+CREATE SCHEMA gold;
+GO
